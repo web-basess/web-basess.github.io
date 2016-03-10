@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>通过两点得到一条线</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        var x = 0;
+        document.onclick=function(ev){
+            ev=ev||window.event;
+            x++;
+
+            var mx = ev.clientX;
+            var my = ev.clientY;
+            var oDiv = document.createElement("div");
+            oDiv.style.width=2+"px";
+            oDiv.style.height= 2+"px";
+            oDiv.style.background = "#000";
+            oDiv.style.position="absolute";
+
+            if(x==1){
+                sx=mx;
+                sy=my;
+                oDiv.style.left = sx + "px";
+                oDiv.style.top = sy + "px";
+                document.body.appendChild(oDiv);
+            }
+
+            if(x==2){
+                sx2=mx;
+                sy2=my;
+                disX = sx2-sx;
+                disY = sy2-sy;
+                rotate = parseInt((sy2-sy)/(sx2-sx)* 360 / Math.PI);
+                hypotenuse = Math.sqrt(Math.pow(disX, 2)+Math.pow(disY, 2));
+                //斜线
+                cos = disX/hypotenuse;
+                radian = Math.acos(cos);
+                //求出弧度
+                angle = 180/(Math.PI/radian);
+                if (disY<0) {
+                    angle = -angle;
+                } else if ((disY == 0) && (disX<0)) {
+                    angle = 180;
+                }
+
+                oDiv.style.height=1 + "px";
+                oDiv.style.background="#f00";
+                oDiv.style.position = "absolute";
+                oDiv.style.left = sx+ "px";
+                oDiv.style.top = sy + "px";
+                oDiv.style.width = hypotenuse + "px";
+                oDiv.style.webkitTransform = "rotate("+angle+"deg)";
+                oDiv.style.transformOrigin ="left top";
+                document.body.appendChild(oDiv);
+
+
+            }
+
+            console.log("左右："+ mx + "上下"+my);
+        }
+
+    </script>
+</body>
+</html>
+
