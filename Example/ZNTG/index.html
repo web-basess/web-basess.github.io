@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>智能投顾</title>
+    <link href="css/common.css" rel="stylesheet" type="text/css"/>
+    <script src="js/jquery-1.11.3.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="header-inner">
+        <h6><img src="images/logo.png"/></h6>
+        <a href="#">立即下载APP</a>
+    </div>
+</div>
+<div id="pages" class="pages">
+    <div class="page1"></div>
+    <div class="page2"></div>
+    <div class="page3"></div>
+    <div class="page4"></div>
+    <div class="page5"></div>
+</div>
+<a href="javascript:void(0)" class="nextBtn"></a>
+<a href="javascript:void(0)" class="prevBtn"></a>
+<div class="p-tab">
+    <ul>
+        <li class="active"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+<div class="footer">
+    <div class="footer-inner">
+        <div class="about">联系我们</div>
+        <p>Copyright © 2011-2016　弘哲金融信息服务(上海)有限公司　|　公网安备11000000000000号　|　沪ICP备00000000号-0</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function tab(){
+    var iH = $("#pages").height();
+    var cH = $("#pages").height() * ($("#pages").find("div").length - 1);
+    var i = 0;
+    var timer = null;
+    //向下箭头
+
+    $(".nextBtn").click(function () {
+        showDown();
+        if (i == 4) {
+            $(".nextBtn").hide();
+            $(".prevBtn").show();
+        }
+    });
+    $(".prevBtn").click(function () {
+        i = 0;
+        $(".p-tab li").eq(i).addClass("active").siblings().removeClass("active");
+        $(".prevBtn").hide();
+        $(".nextBtn").show();
+        $("#pages").stop(true).animate({
+            "top": 0
+        }, 1000);
+
+
+    });
+    //右侧按钮
+    $(".p-tab li").click(function () {
+        var s = $(".p-tab li").index(this);
+        i = s;
+        if (i == 4) {
+            $(".nextBtn").hide();
+            $(".prevBtn").show();
+        } else {
+            $(".prevBtn").hide();
+            $(".nextBtn").show();
+        }
+        $(this).addClass("active").siblings().removeClass("active");
+        $("#pages").stop(true).animate({
+            "top": -iH * s
+        }, 1000);
+    });
+    //向下滚动
+    function showDown() {
+        console.log(i);
+        var iS = parseInt($("#pages").css("top"));
+        clearInterval(timer);
+        if (iS <= -cH) {
+            clearInterval(timer);
+            $("#pages").stop(true).animate({
+                "top": -cH
+            }, 1000);
+        }
+
+        if (!$("#pages").is(":animated")) {
+            i++;
+            if (i == 4) {
+                $(".nextBtn").hide();
+                $(".prevBtn").show();
+            }
+            $(".p-tab").find("li").eq(i).addClass("active").siblings().removeClass("active");
+            $("#pages").stop(true).animate({
+                "top": iS - iH
+            }, 1000);
+
+        }
+
+    }
+    //向上滚动
+    function showUp() {
+        var iS = parseInt($("#pages").css("top"));
+        if (iS >= 0) {
+            clearInterval(timer);
+            $("#pages").stop(true).animate({
+                "top": 0
+            }, 1000);
+        }
+        if (!$("#pages").is(":animated")) {
+            i--;
+            $(".prevBtn").hide();
+            $(".nextBtn").show();
+            $(".p-tab").find("li").eq(i).addClass("active").siblings().removeClass("active");
+            $("#pages").stop(true).animate({
+                "top": iS + iH
+            }, 1000);
+
+        }
+
+    }
+
+    var scrollFunc = function (e) {
+        var direct = 0;
+        e = e || window.event;
+        if (e.wheelDelta) {  //判断浏览器IE，谷歌滑轮事件
+            if (e.wheelDelta > 0) { //当滑轮向上滚动时
+                clearInterval(timer);
+                showUp();
+            }
+            if (e.wheelDelta < 0) { //当滑轮向下滚动时
+                clearInterval(timer);
+                showDown();
+            }
+        } else if (e.detail) {  //Firefox滑轮事件
+            if (e.detail > 0) { //当滑轮向上滚动时
+                clearInterval(timer);
+                showDown();
+            }
+            if (e.detail < 0) { //当滑轮向下滚动时
+                clearInterval(timer);
+                showUp();
+
+            }
+            ScrollText(direct);
+        }
+
+    }
+    //给页面绑定滑轮滚动事件
+    if (pages.addEventListener) {
+        pages.addEventListener('DOMMouseScroll', scrollFunc, false);
+    }
+    //滚动滑轮触发scrollFunc方法
+    pages.onmousewheel = pages.onmousewheel = scrollFunc;
+
+    }
+    tab();
+
+    window.onload=window.onresize = function(){
+        setInterval(tab(),1000);
+    }
+</script>
+</body>
+</html>
