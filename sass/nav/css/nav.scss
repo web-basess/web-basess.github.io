@@ -1,3 +1,4 @@
+@charset "utf-8";
 //1.定义变量
 $color: #fff !default;
 $bgColor: #34495e !default;
@@ -5,7 +6,7 @@ $sfbgColor: #e74c3c !default;
 $fontSize: 14px !default;
 $fontFamily: Arial, Helvetica !default;
 $width: 462px !default;
-//2.clear
+//2.使用%placeholders定义清除浮动
 %clearfix {
   &{
     *zoom: 1;
@@ -20,7 +21,7 @@ $width: 462px !default;
     overflow: hidden;
   }
 }
-
+//3.清除列表默认样式
 %listStyle {
   margin: 0;
   padding: 0;
@@ -32,7 +33,7 @@ $prefix-for-mozilla: true !default;
 $prefix-for-microsoft: true !default;
 $prefix-for-opera: true !default;
 $prefix-for-spec: true !default;
-//Private Browser
+//浏览器前缀
 @mixin prefixer ($property, $value, $prefixes) {
   @each $prefix in $prefixes {
 
